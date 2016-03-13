@@ -7,7 +7,7 @@ package info.view;
 
 import info.controller.Sistema;
 import info.controller.exceptions.NonexistentEntityException;
-import info.modal.Endereco;
+import info.modal.Endereco_1;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -106,7 +106,7 @@ public class DeletarEndereco extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Sistema si = new Sistema();
-        Endereco end = new Endereco();
+        Endereco_1 end = new Endereco_1();
         
         try {
             si.DeletarEndereco(Integer.parseInt(jTextField1.getText()));

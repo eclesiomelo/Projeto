@@ -10,6 +10,8 @@ import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -21,25 +23,26 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Eclesio
  */
 @Entity
-@Table(catalog = "info", schema = "")
+@Table(name = "sequence", catalog = "info", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Sequence.findAll", query = "SELECT s FROM Sequence s"),
-    @NamedQuery(name = "Sequence.findBySeqName", query = "SELECT s FROM Sequence s WHERE s.seqName = :seqName"),
-    @NamedQuery(name = "Sequence.findBySeqCount", query = "SELECT s FROM Sequence s WHERE s.seqCount = :seqCount")})
-public class Sequence implements Serializable {
+    @NamedQuery(name = "Sequence_1.findAll", query = "SELECT s FROM Sequence_1 s"),
+    @NamedQuery(name = "Sequence_1.findBySeqName", query = "SELECT s FROM Sequence_1 s WHERE s.seqName = :seqName"),
+    @NamedQuery(name = "Sequence_1.findBySeqCount", query = "SELECT s FROM Sequence_1 s WHERE s.seqCount = :seqCount")})
+public class Sequence_1 implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "SEQ_NAME", nullable = false, length = 50)
     private String seqName;
     @Column(name = "SEQ_COUNT")
     private BigInteger seqCount;
 
-    public Sequence() {
+    public Sequence_1() {
     }
 
-    public Sequence(String seqName) {
+    public Sequence_1(String seqName) {
         this.seqName = seqName;
     }
 
@@ -69,10 +72,10 @@ public class Sequence implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Sequence)) {
+        if (!(object instanceof Sequence_1)) {
             return false;
         }
-        Sequence other = (Sequence) object;
+        Sequence_1 other = (Sequence_1) object;
         if ((this.seqName == null && other.seqName != null) || (this.seqName != null && !this.seqName.equals(other.seqName))) {
             return false;
         }
@@ -81,7 +84,7 @@ public class Sequence implements Serializable {
 
     @Override
     public String toString() {
-        return "info.modal.Sequence[ seqName=" + seqName + " ]";
+        return "info.modal.Sequence_1[ seqName=" + seqName + " ]";
     }
     
 }

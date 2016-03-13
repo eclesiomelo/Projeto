@@ -24,14 +24,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Eclesio
  */
 @Entity
-@Table(catalog = "info", schema = "")
+@Table(name = "pessoa", catalog = "info", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Pessoa.findAll", query = "SELECT p FROM Pessoa p"),
-    @NamedQuery(name = "Pessoa.findById", query = "SELECT p FROM Pessoa p WHERE p.id = :id"),
-    @NamedQuery(name = "Pessoa.findByIdade", query = "SELECT p FROM Pessoa p WHERE p.idade = :idade"),
-    @NamedQuery(name = "Pessoa.findByNome", query = "SELECT p FROM Pessoa p WHERE p.nome = :nome")})
-public class Pessoa implements Serializable {
+    @NamedQuery(name = "Pessoa_1.findAll", query = "SELECT p FROM Pessoa_1 p"),
+    @NamedQuery(name = "Pessoa_1.findById", query = "SELECT p FROM Pessoa_1 p WHERE p.id = :id"),
+    @NamedQuery(name = "Pessoa_1.findByIdade", query = "SELECT p FROM Pessoa_1 p WHERE p.idade = :idade"),
+    @NamedQuery(name = "Pessoa_1.findByNome", query = "SELECT p FROM Pessoa_1 p WHERE p.nome = :nome")})
+public class Pessoa_1 implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,17 +41,14 @@ public class Pessoa implements Serializable {
     private Integer idade;
     @Column(length = 255)
     private String nome;
-    @JoinColumn(name = "CONT_ID", referencedColumnName = "ID")
-    @ManyToOne
-    private Contato contId;
     @JoinColumn(name = "END_ID", referencedColumnName = "ID")
     @ManyToOne
-    private Endereco endId;
+    private Endereco_1 endId;
 
-    public Pessoa() {
+    public Pessoa_1() {
     }
 
-    public Pessoa(Integer id) {
+    public Pessoa_1(Integer id) {
         this.id = id;
     }
 
@@ -79,19 +76,11 @@ public class Pessoa implements Serializable {
         this.nome = nome;
     }
 
-    public Contato getContId() {
-        return contId;
-    }
-
-    public void setContId(Contato contId) {
-        this.contId = contId;
-    }
-
-    public Endereco getEndId() {
+    public Endereco_1 getEndId() {
         return endId;
     }
 
-    public void setEndId(Endereco endId) {
+    public void setEndId(Endereco_1 endId) {
         this.endId = endId;
     }
 
@@ -105,10 +94,10 @@ public class Pessoa implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Pessoa)) {
+        if (!(object instanceof Pessoa_1)) {
             return false;
         }
-        Pessoa other = (Pessoa) object;
+        Pessoa_1 other = (Pessoa_1) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -117,7 +106,7 @@ public class Pessoa implements Serializable {
 
     @Override
     public String toString() {
-        return "info.modal.Pessoa[ id=" + id + " ]";
+        return "info.modal.Pessoa_1[ id=" + id + " ]";
     }
     
 }

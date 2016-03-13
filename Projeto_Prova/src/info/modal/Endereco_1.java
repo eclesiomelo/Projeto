@@ -25,16 +25,16 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Eclesio
  */
 @Entity
-@Table(catalog = "info", schema = "")
+@Table(name = "endereco", catalog = "info", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Endereco.findAll", query = "SELECT e FROM Endereco e"),
-    @NamedQuery(name = "Endereco.findById", query = "SELECT e FROM Endereco e WHERE e.id = :id"),
-    @NamedQuery(name = "Endereco.findByBairro", query = "SELECT e FROM Endereco e WHERE e.bairro = :bairro"),
-    @NamedQuery(name = "Endereco.findByLogradouro", query = "SELECT e FROM Endereco e WHERE e.logradouro = :logradouro"),
-    @NamedQuery(name = "Endereco.findByNumerocasa", query = "SELECT e FROM Endereco e WHERE e.numerocasa = :numerocasa"),
-    @NamedQuery(name = "Endereco.findByRua", query = "SELECT e FROM Endereco e WHERE e.rua = :rua")})
-public class Endereco implements Serializable {
+    @NamedQuery(name = "Endereco_1.findAll", query = "SELECT e FROM Endereco_1 e"),
+    @NamedQuery(name = "Endereco_1.findById", query = "SELECT e FROM Endereco_1 e WHERE e.id = :id"),
+    @NamedQuery(name = "Endereco_1.findByBairro", query = "SELECT e FROM Endereco_1 e WHERE e.bairro = :bairro"),
+    @NamedQuery(name = "Endereco_1.findByLogradouro", query = "SELECT e FROM Endereco_1 e WHERE e.logradouro = :logradouro"),
+    @NamedQuery(name = "Endereco_1.findByNumerocasa", query = "SELECT e FROM Endereco_1 e WHERE e.numerocasa = :numerocasa"),
+    @NamedQuery(name = "Endereco_1.findByRua", query = "SELECT e FROM Endereco_1 e WHERE e.rua = :rua")})
+public class Endereco_1 implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,12 +50,12 @@ public class Endereco implements Serializable {
     @Column(length = 255)
     private String rua;
     @OneToMany(mappedBy = "endId")
-    private Collection<Pessoa> pessoaCollection;
+    private Collection<Pessoa_1> pessoaCollection;
 
-    public Endereco() {
+    public Endereco_1() {
     }
 
-    public Endereco(Integer id) {
+    public Endereco_1(Integer id) {
         this.id = id;
     }
 
@@ -100,11 +100,11 @@ public class Endereco implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Pessoa> getPessoaCollection() {
+    public Collection<Pessoa_1> getPessoaCollection() {
         return pessoaCollection;
     }
 
-    public void setPessoaCollection(Collection<Pessoa> pessoaCollection) {
+    public void setPessoaCollection(Collection<Pessoa_1> pessoaCollection) {
         this.pessoaCollection = pessoaCollection;
     }
 
@@ -118,10 +118,10 @@ public class Endereco implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Endereco)) {
+        if (!(object instanceof Endereco_1)) {
             return false;
         }
-        Endereco other = (Endereco) object;
+        Endereco_1 other = (Endereco_1) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -130,7 +130,7 @@ public class Endereco implements Serializable {
 
     @Override
     public String toString() {
-        return "info.modal.Endereco[ id=" + id + " ]";
+        return "info.modal.Endereco_1[ id=" + id + " ]";
     }
     
 }

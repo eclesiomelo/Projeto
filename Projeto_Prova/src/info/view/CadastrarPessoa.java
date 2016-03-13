@@ -6,7 +6,7 @@
 package info.view;
 
 import info.controller.Sistema;
-import info.modal.Pessoa;
+import info.modal.Pessoa_1;
 import javax.swing.JOptionPane;
 
 /**
@@ -117,7 +117,7 @@ public class CadastrarPessoa extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Sistema si = new Sistema();
-        Pessoa pe = new Pessoa();
+        Pessoa_1 pe = new Pessoa_1();
         
         pe.setNome(nome.getText());
         pe.setIdade(Integer.parseInt(idade.getText()));
