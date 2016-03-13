@@ -5,15 +5,16 @@
  */
 package info.controller;
 
-import info.exceptions.NonexistentEntityException;
-import info.exceptions.PreexistingEntityException;
-import info.model.Sequence;
+import info.controller.exceptions.NonexistentEntityException;
+import info.controller.exceptions.PreexistingEntityException;
+import info.modal.Sequence;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -27,6 +28,11 @@ public class SequenceJpaController implements Serializable {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
+
+    public SequenceJpaController() {
+        String up = "InfoPU";
+        emf = Persistence.createEntityManagerFactory(up);
+    }
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -140,5 +146,5 @@ public class SequenceJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

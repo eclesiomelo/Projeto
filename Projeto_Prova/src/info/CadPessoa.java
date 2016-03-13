@@ -6,7 +6,8 @@
 package info;
 import com.sun.glass.ui.SystemClipboard;
 import info.controller.*;
-import info.model.*;
+import info.modal.*;
+
 import java.util.Scanner;
 import javax.swing.JOptionPane;
 /**

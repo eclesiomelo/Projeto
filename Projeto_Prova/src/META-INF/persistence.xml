@@ -3,10 +3,10 @@
   <persistence-unit name="InfoPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>info.model.Pessoa</class>
-    <class>info.model.Sequence</class>
-    <class>info.view.Pessoa</class>
-    <class>info.model.Contato</class>
-    <class>info.model.Endereco</class>
+    <class>info.modal.Sequence</class>
+    <class>info.modal.Pessoa</class>
+    <class>info.modal.Contato</class>
+    <class>info.modal.Endereco</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/info?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

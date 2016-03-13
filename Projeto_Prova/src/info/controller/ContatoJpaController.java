@@ -5,17 +5,21 @@
  */
 package info.controller;
 
-import info.exceptions.NonexistentEntityException;
-import info.model.Contato;
+import info.controller.exceptions.NonexistentEntityException;
+import info.controller.exceptions.PreexistingEntityException;
+import info.modal.Contato;
 import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import info.modal.Pessoa;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -26,10 +30,12 @@ public class ContatoJpaController implements Serializable {
     public ContatoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    
-      public ContatoJpaController() {
+
+    public ContatoJpaController() {
+        
         String up = "InfoPU";
         emf = Persistence.createEntityManagerFactory(up);
+        
     }
     
     private EntityManagerFactory emf = null;
@@ -38,13 +44,36 @@ public class ContatoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Contato contato) {
+    public void create(Contato contato) throws PreexistingEntityException, Exception {
+        if (contato.getPessoaCollection() == null) {
+            contato.setPessoaCollection(new ArrayList<Pessoa>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Collection<Pessoa> attachedPessoaCollection = new ArrayList<Pessoa>();
+            for (Pessoa pessoaCollectionPessoaToAttach : contato.getPessoaCollection()) {
+                pessoaCollectionPessoaToAttach = em.getReference(pessoaCollectionPessoaToAttach.getClass(), pessoaCollectionPessoaToAttach.getId());
+                attachedPessoaCollection.add(pessoaCollectionPessoaToAttach);
+            }
+            contato.setPessoaCollection(attachedPessoaCollection);
             em.persist(contato);
+            for (Pessoa pessoaCollectionPessoa : contato.getPessoaCollection()) {
+                Contato oldContIdOfPessoaCollectionPessoa = pessoaCollectionPessoa.getContId();
+                pessoaCollectionPessoa.setContId(contato);
+                pessoaCollectionPessoa = em.merge(pessoaCollectionPessoa);
+                if (oldContIdOfPessoaCollectionPessoa != null) {
+                    oldContIdOfPessoaCollectionPessoa.getPessoaCollection().remove(pessoaCollectionPessoa);
+                    oldContIdOfPessoaCollectionPessoa = em.merge(oldContIdOfPessoaCollectionPessoa);
+                }
+            }
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (findContato(contato.getId()) != null) {
+                throw new PreexistingEntityException("Contato " + contato + " already exists.", ex);
+            }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -57,7 +86,34 @@ public class ContatoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Contato persistentContato = em.find(Contato.class, contato.getId());
+            Collection<Pessoa> pessoaCollectionOld = persistentContato.getPessoaCollection();
+            Collection<Pessoa> pessoaCollectionNew = contato.getPessoaCollection();
+            Collection<Pessoa> attachedPessoaCollectionNew = new ArrayList<Pessoa>();
+            for (Pessoa pessoaCollectionNewPessoaToAttach : pessoaCollectionNew) {
+                pessoaCollectionNewPessoaToAttach = em.getReference(pessoaCollectionNewPessoaToAttach.getClass(), pessoaCollectionNewPessoaToAttach.getId());
+                attachedPessoaCollectionNew.add(pessoaCollectionNewPessoaToAttach);
+            }
+            pessoaCollectionNew = attachedPessoaCollectionNew;
+            contato.setPessoaCollection(pessoaCollectionNew);
             contato = em.merge(contato);
+            for (Pessoa pessoaCollectionOldPessoa : pessoaCollectionOld) {
+                if (!pessoaCollectionNew.contains(pessoaCollectionOldPessoa)) {
+                    pessoaCollectionOldPessoa.setContId(null);
+                    pessoaCollectionOldPessoa = em.merge(pessoaCollectionOldPessoa);
+                }
+            }
+            for (Pessoa pessoaCollectionNewPessoa : pessoaCollectionNew) {
+                if (!pessoaCollectionOld.contains(pessoaCollectionNewPessoa)) {
+                    Contato oldContIdOfPessoaCollectionNewPessoa = pessoaCollectionNewPessoa.getContId();
+                    pessoaCollectionNewPessoa.setContId(contato);
+                    pessoaCollectionNewPessoa = em.merge(pessoaCollectionNewPessoa);
+                    if (oldContIdOfPessoaCollectionNewPessoa != null && !oldContIdOfPessoaCollectionNewPessoa.equals(contato)) {
+                        oldContIdOfPessoaCollectionNewPessoa.getPessoaCollection().remove(pessoaCollectionNewPessoa);
+                        oldContIdOfPessoaCollectionNewPessoa = em.merge(oldContIdOfPessoaCollectionNewPessoa);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -75,7 +131,7 @@ public class ContatoJpaController implements Serializable {
         }
     }
 
-    public void destroy(Long id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -86,6 +142,11 @@ public class ContatoJpaController implements Serializable {
                 contato.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The contato with id " + id + " no longer exists.", enfe);
+            }
+            Collection<Pessoa> pessoaCollection = contato.getPessoaCollection();
+            for (Pessoa pessoaCollectionPessoa : pessoaCollection) {
+                pessoaCollectionPessoa.setContId(null);
+                pessoaCollectionPessoa = em.merge(pessoaCollectionPessoa);
             }
             em.remove(contato);
             em.getTransaction().commit();
@@ -141,11 +202,5 @@ public class ContatoJpaController implements Serializable {
             em.close();
         }
     }
-
-    void destroy(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
     
 }

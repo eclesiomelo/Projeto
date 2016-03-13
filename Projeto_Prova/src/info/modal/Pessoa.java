@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package info.model;
+package info.modal;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -34,14 +36,17 @@ public class Pessoa implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(nullable = false)    
+    @Column(nullable = false)
     private Integer id;
     private Integer idade;
     @Column(length = 255)
     private String nome;
-    private Endereco end;
-    private Contato cont;
-    
+    @JoinColumn(name = "CONT_ID", referencedColumnName = "ID")
+    @ManyToOne
+    private Contato contId;
+    @JoinColumn(name = "END_ID", referencedColumnName = "ID")
+    @ManyToOne
+    private Endereco endId;
 
     public Pessoa() {
     }
@@ -74,22 +79,21 @@ public class Pessoa implements Serializable {
         this.nome = nome;
     }
 
-    public Endereco getEnd() {
-        return end;
+    public Contato getContId() {
+        return contId;
     }
 
-    public void setEnd(Endereco end) {
-        this.end = end;
+    public void setContId(Contato contId) {
+        this.contId = contId;
     }
 
-    public Contato getCont() {
-        return cont;
+    public Endereco getEndId() {
+        return endId;
     }
 
-    public void setCont(Contato cont) {
-        this.cont = cont;
+    public void setEndId(Endereco endId) {
+        this.endId = endId;
     }
-    
 
     @Override
     public int hashCode() {
@@ -113,9 +117,7 @@ public class Pessoa implements Serializable {
 
     @Override
     public String toString() {
-        return "info.model.Pessoa[ id=" + id + " ]";
+        return "info.modal.Pessoa[ id=" + id + " ]";
     }
-
-  
     
 }

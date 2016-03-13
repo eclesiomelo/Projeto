@@ -5,9 +5,10 @@
  */
 package info.controller;
 
-import info.model.*;
+import info.modal.*;
+
 import info.controller.*;
-import info.exceptions.NonexistentEntityException;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,17 +45,13 @@ public class Sistema {
         return pe;
     }
 
-    public void DeletarPessoa(Integer id) {
+    public void DeletarPessoa(Integer id) throws info.controller.exceptions.NonexistentEntityException {
         PessoaJpaController pejpa = new PessoaJpaController();
-        try {
-            pejpa.destroy(id);
-        } catch (NonexistentEntityException ex) {
-            Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        pejpa.destroy(id);
     }
 
     //Endereco
-    public void CadastrarEndereco(Endereco end) {
+    public void CadastrarEndereco(Endereco end) throws Exception {
         EnderecoJpaController endjpa = new EnderecoJpaController();
         endjpa.create(end);
     }
@@ -75,13 +72,13 @@ public class Sistema {
         return end;
     }
 
-    public void DeletarEndereco(Integer id) {
+    public void DeletarEndereco(Integer id) throws info.controller.exceptions.NonexistentEntityException {
         EnderecoJpaController endjpa = new EnderecoJpaController();
         endjpa.destroy(id);
     }
 
     //Contato
-    public void CadastrarContato(Contato con) {
+    public void CadastrarContato(Contato con) throws Exception {
         ContatoJpaController conjpa = new ContatoJpaController();
         conjpa.create(con);
     }
@@ -102,8 +99,10 @@ public class Sistema {
         return con;
     }
 
-    public void DeletarContato(Integer id) {
+    public void DeletarContato(Integer id) throws info.controller.exceptions.NonexistentEntityException {
         ContatoJpaController conjpa = new ContatoJpaController();
         conjpa.destroy(id);
     }
+
+  
 }

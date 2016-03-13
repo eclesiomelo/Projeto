@@ -1,4 +1,4 @@
-package info.exceptions;
+package info.controller.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;
