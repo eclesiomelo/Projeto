@@ -6,17 +6,16 @@
 package info.controller;
 
 import info.controller.exceptions.NonexistentEntityException;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import info.modal.Endereco_1;
 import info.modal.Pessoa_1;
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -27,7 +26,7 @@ public class Pessoa_1JpaController implements Serializable {
     public Pessoa_1JpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-     public Pessoa_1JpaController() {
+    public Pessoa_1JpaController() {
         String up = "InfoPU";
         emf = Persistence.createEntityManagerFactory(up);
     }
@@ -42,16 +41,7 @@ public class Pessoa_1JpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Endereco_1 endId = pessoa_1.getEndId();
-            if (endId != null) {
-                endId = em.getReference(endId.getClass(), endId.getId());
-                pessoa_1.setEndId(endId);
-            }
             em.persist(pessoa_1);
-            if (endId != null) {
-                endId.getPessoaCollection().add(pessoa_1);
-                endId = em.merge(endId);
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -65,22 +55,7 @@ public class Pessoa_1JpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Pessoa_1 persistentPessoa_1 = em.find(Pessoa_1.class, pessoa_1.getId());
-            Endereco_1 endIdOld = persistentPessoa_1.getEndId();
-            Endereco_1 endIdNew = pessoa_1.getEndId();
-            if (endIdNew != null) {
-                endIdNew = em.getReference(endIdNew.getClass(), endIdNew.getId());
-                pessoa_1.setEndId(endIdNew);
-            }
             pessoa_1 = em.merge(pessoa_1);
-            if (endIdOld != null && !endIdOld.equals(endIdNew)) {
-                endIdOld.getPessoaCollection().remove(pessoa_1);
-                endIdOld = em.merge(endIdOld);
-            }
-            if (endIdNew != null && !endIdNew.equals(endIdOld)) {
-                endIdNew.getPessoaCollection().add(pessoa_1);
-                endIdNew = em.merge(endIdNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -109,11 +84,6 @@ public class Pessoa_1JpaController implements Serializable {
                 pessoa_1.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The pessoa_1 with id " + id + " no longer exists.", enfe);
-            }
-            Endereco_1 endId = pessoa_1.getEndId();
-            if (endId != null) {
-                endId.getPessoaCollection().remove(pessoa_1);
-                endId = em.merge(endId);
             }
             em.remove(pessoa_1);
             em.getTransaction().commit();

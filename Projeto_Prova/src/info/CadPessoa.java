@@ -26,11 +26,16 @@ public class CadPessoa {
         
         Pessoa_1 pe = new Pessoa_1();
         Sistema si = new Sistema();
-        pe.setId(1);
-        pe.setNome("alguem");
-        pe.setIdade(21);
+        Endereco_1 end = new Endereco_1();
         
-        si.CadastrarPessoa(pe);
+        end.setId(1);
+        
+        end.setBairro("asdasd");
+        end.setNumerocasa("qqqqqqq");
+        end.setRua("aaaaaaaaaa");
+        end.setLogradouro("uma ai");
+        
+        si.AlterarEndereco(end);
         
     }
     

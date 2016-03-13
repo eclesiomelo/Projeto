@@ -41,9 +41,7 @@ public class Pessoa_1 implements Serializable {
     private Integer idade;
     @Column(length = 255)
     private String nome;
-    @JoinColumn(name = "END_ID", referencedColumnName = "ID")
-    @ManyToOne
-    private Endereco_1 endId;
+    
 
     public Pessoa_1() {
     }
@@ -76,14 +74,7 @@ public class Pessoa_1 implements Serializable {
         this.nome = nome;
     }
 
-    public Endereco_1 getEndId() {
-        return endId;
-    }
-
-    public void setEndId(Endereco_1 endId) {
-        this.endId = endId;
-    }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;
